@@ -32,7 +32,7 @@ Herencia Templates
 
 -Luego de arreglar estos errores, esta pensado agregar avatar, mensajeria entre usuarios
 
--Al estar Funcional, agrergar Video de funcionalidad
+-Al estar Funcional, agregar Video de funcionalidad
 
 Prueba de Errores:
 

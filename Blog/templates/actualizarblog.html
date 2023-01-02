@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">Modificar Blog</h1>
+{% endblock %}
+
+{% block contenido %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+
+{% endblock %}

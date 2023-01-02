@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+Perfil
+{% endblock %}
+
+{% block contenido %}
+
+<ul>
+    <a class="nav-link"   href="{% url 'Inicio' %}"}>Inicio</a></li>
+    <a class="nav-link" href="{% url 'Actualizar' user.id %}"}>Actualizar Perfil</a></li>
+    
+</ul>
+
+<ul>
+    <li>User: {{user.username}}</li>
+    <li>Email: {{user.email}}</li>
+    <li>Nombre: {{user.first_name}}</li>
+    <li>Apellido: {{user.last_name}}</li>
+
+</ul>
+
+{% endblock %}

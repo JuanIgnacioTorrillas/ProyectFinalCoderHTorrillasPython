@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">Registrarse</h1>
+{% endblock %}
+
+{% block contenido %}
+
+<form method="POST"> 
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    
+    <input type="submit" value="CREAR USUARIO">
+    
+    
+</form>
+
+    
+
+{% endblock %}

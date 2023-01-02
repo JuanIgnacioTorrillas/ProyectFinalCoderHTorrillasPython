@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">Busqueda Blogs</h1>
+{% endblock %}
+
+{% block contenido %}
+
+<form action="" method="GET">
+    {{busqueda_blog}}
+    <button type="submit">Buscar</button>
+</form>
+
+    {{ resultado }}
+
+    
+
+{% endblock %}

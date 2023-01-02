@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block titulo %}
+Contenido Del Blog Seleccionado      
+{% endblock %}
+
+{% block contenido %}
+
+<h1>{{ blog.titulo }}</h1>
+<small>by: {{ blog.autor}}</small>
+<br/>
+<br/>
+
+<h2>
+{{ blog.cuerpo}}
+</h2>
+<br/>
+<br/>
+
+<a href="{% url "Inicio" %}">Volver</a>
+
+{% endblock %}

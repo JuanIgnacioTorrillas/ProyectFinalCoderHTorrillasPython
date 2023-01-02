@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block titulo %}
+
+{% if request.user.is_authenticated %}
+
+Bienvenido {{ user.username }}
+
+{% else %}
+
+Bienvenido !
+
+{% endif %}
+
+{% endblock %}
+
+{% block contenido %}
+
+ 
+<h1>Hola!</h1>
+<p>Aqui vas a podes leer y subir instrucciones de cualquier tema! Podes Registrarte O Loguearte para subir tus instrucciones!</p>
+
+
+
+{% endblock %}

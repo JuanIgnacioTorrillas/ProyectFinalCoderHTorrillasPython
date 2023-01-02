@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+{% block titulo %}
+Aqui Vas a Ver Todos Los Titulos y Autores de Los Blogs  
+{% endblock %}
+
+{% block contenido %}
+
+    
+<h1>Blogs</h1>
+
+<ul>
+{% for blog in object_list%}
+
+    <li><a href="{% url "DetalleBlog" blog.pk %}"> 
+    
+    {% csrf_token %}
+    {{ form }}
+    {{ blog.titulo }} </a> -
+    {{ blog.autor }} <br/>
+    {{ blog.cuerpo }}</li>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

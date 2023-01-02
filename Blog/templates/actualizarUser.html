@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+Actualizar Usuario
+{% endblock %}
+
+{% block contenido %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+
+{% endblock %}

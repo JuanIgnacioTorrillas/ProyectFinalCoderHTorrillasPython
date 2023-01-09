@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% load static %}
+
+{% block titulo %}
+<h1 class="mb-5">¡Resultados de la busqueda!</h1>
+{% endblock %}
+
+{% block contenido %}
+
+{% if Blogs %}
+<ul>
+    {% for blog in Blogs %}
+        <li>{{blog.autor}}</li>
+        <li>{{blog.titulo | safe}}</li>
+        <br>
+    {% endfor %}
+</ul>
+
+{% else %}
+
+<p> ¡No hay blogs con ese autor!</p>
+
+{% endif %}
+
+{% endblock %}

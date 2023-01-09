@@ -18,9 +18,9 @@ Aqui Vas a Ver Todos Los Titulos y Autores de Los Blogs
     
     {% csrf_token %}
     {{ form }}
-    {{ blog.titulo }} </a> -
+    {{ blog.titulo | safe}} </a> -
     {{ blog.autor }} <br/>
-    {{ blog.cuerpo }}</li>
+    {{ blog.cuerpo | safe }}</li>
 
 {% endfor %}
 

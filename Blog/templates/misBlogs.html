@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+Mis Blogs
+{% endblock %}
+
+{% block contenido %}
+
+<h2>Agregar un nuevo blog: </h2>  
+<a class="btn btn-primary text-uppercase" href="{% url 'CrearBlog' %}">Agregar Blog</a>
+<br/>
+<h2>Blogs existentes :</h2> 
+{% if blogs %}
+<ul>
+{% for blog in blogs %}
+
+
+<hr class="my-4" /> 
+<div class="post-preview"> 
+<a href="{% url 'post' blog.id %}">
+<h2 class="post-title">{{ blog.titulo }}</h2>
+<h4 class="post-subtitle">{{ blog.subtitulo }}</h3>
+</a>
+<p class="post-meta">
+Publicado por {{ blog.autor }}
+en {{ blog.fecha}}
+</p>
+<div>
+<a class="btn btn-primary text-uppercase" href="{% url 'ActualizarBlog' blog.id %}">Editar</a> <a class="btn btn-primary text-uppercase" href="{% url 'EliminarBlog' blog.id %}">Eliminar</a>
+</div>
+</div>
+
+{% endfor %}
+</ul>
+
+{% else %}
+<h3>No has agregado ningun blog aun. </h3>
+
+{% endif %}
+
+{% endblock %}

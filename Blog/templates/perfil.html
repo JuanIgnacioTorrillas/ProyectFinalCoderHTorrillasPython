@@ -7,11 +7,12 @@ Perfil
 
 {% block contenido %}
 
-<ul>
-    <a class="nav-link"   href="{% url 'Inicio' %}"}>Inicio</a></li>
-    <a class="nav-link" href="{% url 'Actualizar' user.id %}"}>Actualizar Perfil</a></li>
+
+<h2>Informacion del usuario</h2>
+
+<a class="nav-link" href="{% url 'Actualizar' %}"}>Actualizar Usuario</a></li>
     
-</ul>
+
 
 <ul>
     <li>User: {{user.username}}</li>
@@ -20,5 +21,18 @@ Perfil
     <li>Apellido: {{user.last_name}}</li>
 
 </ul>
+
+<br/>
+<h2>Informacion del perfil</h2>
+<div class="post-preview">
+    <table>
+        <p>Descripcion: {{ descripcion }}</p>
+        <p>web: {{ web }}</p>
+        <br>
+        <p><small>Aqui Puede Editar Perfil</small></p>
+        <div>
+            <a class="btn btn-primary text-uppercase" href="{% url 'EditarPerfil' %}">Editar perfil</a>
+        </div>
+
 
 {% endblock %}

@@ -3,18 +3,21 @@
 {% load static %}
 
 {% block titulo %}
-<h1 class="mb-5">Busqueda Blogs</h1>
+<h1 class="mb-5">Busqueda Blogs por autor</h1>
 {% endblock %}
 
-{% block contenido %}
 
-<form action="" method="GET">
-    {{busqueda_blog}}
-    <button type="submit">Buscar</button>
+{% block contenido %}
+<h1>Por favor,ingrese el autor de los blogs que desea buscar:</h1>
+
+<form action="{% url 'buscar' %}" method="GET"> 
+
+    <input type="text" name="autor" id="autor">
+
+    <input type="submit" value="buscar">
+
+
 </form>
 
-    {{ resultado }}
-
-    
-
+{{ mensaje }}
 {% endblock %}

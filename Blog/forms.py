@@ -1,19 +1,43 @@
 from django import forms
-from django.forms import ModelForm
+from django.contrib.auth.forms import  UserCreationForm, UserChangeForm
 from .models import *
+from django.forms import ModelForm
+from django.contrib.auth.models import User
 from ckeditor.widgets import CKEditorWidget
 
+#Blog
 class BlogForm(forms.ModelForm):
     body = forms.CharField(widget=CKEditorWidget())
     
     class Meta:
         model = Blog
         fields = ['titulo', 'subtitulo', 'cuerpo','autor','fecha','imagen']
-    
-class User_Form(UserCreationForm,forms.ModelForm):
+
+
+#Usuario  
+class RegistroForm(UserCreationForm): #Registro Usuario
+    first_name = forms.CharField(label="Ingrese nombre")
+    last_name = forms.CharField(label="Ingrese apellido")
+    email = forms.EmailField()
+    password1= forms.CharField(label="Ingrese Contraseña", widget=forms.PasswordInput)
+    password2= forms.CharField(label="Repita Contraseña", widget=forms.PasswordInput)
+
     class Meta:
         model = User
-        fields = ['username','email', 'first_name', 'last_name']
+        fields = ["first_name", "last_name", "username", "email", "password1", "password2"]
+        help_texts = {x:"" for x in fields} #Valores Vacios
         
-class BusquedaBlogs(forms.Form):
-    search = forms.CharField()
+class EditUserForm(UserChangeForm): #Editar Usuario
+    password = None
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "email"]
+        help_texts = {x:"" for x in fields}
+        
+class Form_Perfil(ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['descripcion', 'web', 'avatar']
+        
+class AvatarForm(forms.Form):
+    imagen=forms.ImageField(label="Imagen")

@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+Actualizar Perfil
+{% endblock %}
+
+{% block contenido %}
+
+
+<form action="{% url 'EditarPerfil '%}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <table>
+            {{ form }}
+            {{ form.media  }}
+        </table>
+        <div class="form-group">
+            <br>
+            <input type="submit" class="btn btn-primary btn-block" value="Editar perfil">
+        </div>
+</form>
+
+{{ mensaje }}
+
+{% endblock %}

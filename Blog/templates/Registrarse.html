@@ -8,17 +8,19 @@
 
 {% block contenido %}
 
-<form method="POST"> 
+<form action="{% url 'Registrarse'  %}" method="POST"> {% csrf_token %}
 
-    {% csrf_token %}
+    <table>
+    
+        {{ form.as_table }}
+    
+    </table>
+    
+    <input type="submit" value="Crear Usuario">
+    
+    
+    </form>
 
-    {{ form.as_p }}
-    
-    <input type="submit" value="CREAR USUARIO">
-    
-    
-</form>
-
-    
+    {{ mensaje }}
 
 {% endblock %}

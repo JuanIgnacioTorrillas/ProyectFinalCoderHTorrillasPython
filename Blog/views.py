@@ -1,13 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from .models import *
 from .forms import *
 from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import  AuthenticationForm
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from datetime import date
 
 #-----BLOG-----
 
@@ -29,76 +30,189 @@ class ArticleDetailView(DetailView): #Detalles del blog
     model=Blog
     template_name="detalle.html"
 
+@ login_required
+def mis_blogs(request): #Lista de Blogs del Usuario
+    user_name = request.user.get_full_name()
+    blogs = Blog.objects.filter(autor = user_name).order_by("-id") 
+    return render(request, "misBlogs.html", {"blogs": blogs}) 
 
-class CrearBlog(LoginRequiredMixin, CreateView): #Añadir Blog
+@ login_required
+def CrearBlog(request): #Añadir Blog
+    if request.method == "POST":
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            datos = form.cleaned_data
+            nombre_autor = request.user.get_full_name()
+            nuevo_blog = Blog(titulo = datos["titulo"], subtitulo = datos["subtitulo"], cuerpo = datos["cuerpo"], imagen = datos["imagen"] , autor = nombre_autor, fecha = date.today())
+            nuevo_blog.save()
+            return render(request, "inicio", {"mensaje": "¡Has agregado un Blog!"})
+        else:
+            return render(request, "crearblog.html", {"form" : form, "mensaje": "Error,No se pudo crear la entrada, intentelo denuevo"})
+    else:
+        return render(request, "crearblog.html", {"form" : form})
 
-    model = Blog
-    success_url = reverse_lazy("LeerMas")
-    fields = ['titulo', 'subtitulo', 'cuerpo','autor','fecha','imagen']
+@ login_required
+def editBlog(request, id): #Editar Blog
+    user_name = request.user.get_full_name()
+    edit = Blog.objects.get(id = id)
+    if user_name == edit.autor:        # Solo el Autor Tiene Permiso
+        if request.method == "POST":
+            formulario = BlogForm(request.POST, request.FILES)
+            if formulario.is_valid():
+                datos = formulario.cleaned_data
+                
+                info_imagen = datos["imagen"]
+                if str(type(info_imagen)) == "<class 'NoneType'>":      # Imagen sin cambios,no se actualiza la base de datos
+                    pass
+                elif str(info_imagen) == "False":                       # False=None
+                   edit.imagen = None
+                else:                                                   # Dentro del else=Hay Imagen
+                    edit.imagen = datos["imagen"]
 
-class UpdateBlog(LoginRequiredMixin, UpdateView): #Editar Blog
-    model = Blog
-    template_name = 'actualizarblog.html'
-    fields = ['titulo', 'subtitulo', 'cuerpo','autor','fecha','imagen']
-    success_url = reverse_lazy("LeerMas")
+                edit.titulo = datos["titulo"]
+                edit.subtitulo = datos["subtitulo"]
+                edit.cuerpo = datos["cuerpo"]
+                edit.save()
 
-class DeleteBlog(LoginRequiredMixin,DeleteView): #Borrar Blog
-    model = Blog
-    template_name ='eliminarblog.html'
-    success_url = reverse_lazy("Blogs")
+                return render(request, "iniciol", {"mensaje": "El post ha sido editado de forma correcta!"})
+            else:
+                formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
+                return render(request, "actualizarblog", {"form" : formulario_edit, "edit": edit, "mensaje_publicacion": "Intentelo Nuevamente, hubo un error"})
+        else:
+            formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
+            return render(request, "actualizarblog", {"form": formulario_edit , "mensaje": "Editar un blog", "edit": edit})
+    else:
+        return render(request, "inicio.html", {"mensaje": "No puede editar esto"})
+
+@ login_required
+def deleteBlog(request, id): #Borrar Blog
+    user_name = request.user.get_full_name()
+    blog_delete = Blog.objects.get(id=id)
+    if user_name == blog_delete.autor:      # Solo el Autor
+        blog_delete.delete()
+        return render(request, "inicio.hmtl", {"mensaje": "Blog eliminado correctamente"})
+    else:
+        return render(request, "inicio.html", {"mensaje": "No esta autorizado para realizar esta accion"})
+
+def busquedaAutor(request): 
+    return render(request, "busqueda.html")
     
-def busqueda_blog(request): #Buscar un Blog
+def buscar(request): #Busqueda
     
-    busqueda_blog = BusquedaBlogs()
+    #if request.GET.get("autor"):
 
-    if request.GET.get("gusto"): #o tambien if "gusto" in request.GET
+        #autor=request.GET["autor"]
+        
+        #Blogs = Blog.objects.filter(autor = autor)  
+        
+        #return render(request, "resultadobusqueda.html", {'Blogs': Blogs })
+    #else:
+        #return render(request, "busqueda.html", {"mensaje":" ¡No Existen Blogs de ese autor!"})   
+
+    if "autor" in request.GET:
 
         autor=request.GET["autor"]
-        
-        resultado = Blog.objects.filter(autor = autor)
-    
+
+        Blogs=Blog.objects.filter(autor__icontains=autor)
+        return render(request,"resultadosBusqueda.html", {"Blogs":Blogs} )
     else:
-        resultado = "No existe Blog de ese Autor"
-    
-    return render(request, "busqueda.html", {"busqueda_blog": busqueda_blog, "resultado": resultado})
-    
-    
-    
-#-----LOGIN-----
+        return render(request, "busqueda.html", {"mensaje":"¡No Existen Blogs de ese autor!"})
 
-class SignUpUser(CreateView,SuccessMessageMixin):  #Registrarse
-    model = Usuario
-    template_name = 'Registrarse.html'
-    success_url = reverse_lazy("IniciarSesion") 
-    form_class = User_Form 
-    
-class LogInUser(LoginView): #LogIn
-    
-    template_name = 'iniciosesion.html'
-    
-    def get_success_url(self):
+#-----LOGIN/USUARIO-----
 
-        return reverse_lazy("Perfil", kwargs={"pk": self.request.user.usuario.id})
+def obtenerAvatar(request):
+    if request.user.is_authenticated:
+        lista = Perfil.objects.filter(user=request.user)
+        if len(lista)!=0:
+            imagen = lista[0].avatar.url
+        else:
+            imagen = ""
+    else:
+        imagen = ""
+    return imagen
+
+
+def register(request): #Registrarse
+    if request.method == "POST":
+        registro = RegistroForm(request.POST)
+        if registro.is_valid():
+            usuario = registro.cleaned_data.get("username")
+            registro.save()     
+            return render(request, "inicio.html", {"mensaje":"Usuario  creado correctamente"})
+        else:
+           return render(request, "Registrarse.html", {"form":registro , "mensaje":"Usuario creado correctamente"}) 
+    else:
+        registro = RegistroForm()
+        return render(request, "Registrarse.html", {"form":registro})
+
+def login(request): #Login
+    if request.method == "POST":
+        form=AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usuario=form.cleaned_data.get("username")
+            clave=form.cleaned_data.get("password")
+            
+            log_user = authenticate(username = usuario, password = clave)
+            
+            if log_user is not None:    
+                login(request, usuario)
+                return render(request, 'inicio.html', {'mensaje':f"Bienvenido {usuario}" })
+            else:
+                return render(request, 'iniciosesion.html', {'mensaje':"Usuario o contraseña incorrectos", 'form':form})
+
+        else:
+            return render(request, 'iniciosesion.html', {'mensaje':"Usuario o contraseña incorrectos", 'form':form})
+
+    else:
+        form = AuthenticationForm()
+    return render(request, "iniciosesion.html", {"form":form})
     
-class LogOutUser(LogoutView): #LogOut
-    template_name = "cerrarsesion.html"
+@ login_required #LogOut
+def logout(request):
+    logout(request)
+    return render(request, "inicio.html", {"mensaje":"LogOut Correcto"})
     
-class UpdateUser(UpdateView,LoginRequiredMixin,UserPassesTestMixin): #Actualizar Datos
+@ login_required #Editar Usuario
+def editarUsuario(request):
     
-    model = Usuario
-    template_name = 'actualizarUser.html'
-    fields = ['username', 'password', 'email', 'first_name', 'last_name']
+    if request.method == "POST":
+        form = EditUserForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            return render(request, "inicio.html", {"mensaje":"Perfil editado correctamente"})
+        else:
+           return render(request, "actualizarUser.html", {"form" : form, "mensaje":"Error al editar el perfil"}) 
+    else:
+        return render(request, "actualizarUser", {"form":form})
+    
+@ login_required #Ver Perfil
+def perfil(request):
+    datos_perfil = Perfil.objects.filter(user = request.user)
+    if datos_perfil:
+        descripcion = datos_perfil[0].descripcion
+        web = datos_perfil[0].web
+    else:
+        descripcion = ""
+        web = ""
+    return render(request, "perfil.html", {"user" : request.user, "descripcion" : descripcion, "web": web, "avatar": obtenerAvatar(request)})
 
-    def test(self):
-        return self.request.user.usuario.id == int(self.kwargs['pk'])
-
-    def get_success_url(self):
-        return reverse_lazy("Perfil", kwargs={"pk": self.request.user.usuario.id})
-
-class Perfil(LoginRequiredMixin,UserPassesTestMixin, DetailView): #Ver Perfil
-
-    model = Usuario
-    template_name = "perfil.html"
-
-    def test(self):
-        return self.request.user.usuario.id == int(self.kwargs['pk'])
+@ login_required
+def editarPerfil(request): #Editar Perfil
+    datos = Perfil.objects.filter(user = request.user)
+    if datos:
+        form = Form_Perfil(initial={"descripcion": datos[0].descripcion, "web": datos[0].web, "avatar": datos[0].avatar})
+    else:
+        form = Form_Perfil()
+    if request.method == "POST":
+        formulario = Form_Perfil(request.POST, request.FILES)
+        if formulario.is_valid():
+            datos = Perfil.objects.filter(user = request.user)
+            if datos != None: 
+                datos.delete()
+            datos_nuevos = Perfil(user=request.user, descripcion = request.POST["descripcion"], web = request.POST["web"], avatar = request.FILES["avatar"] )
+            datos_nuevos.save()
+            return render(request, "inicio.html", {"mensaje": "El perfil ha sido editado exitosamente!"})
+        else:
+            return render(request, "actuaperfil.html", {"form" : form, "mensaje": "Lo siento, ocurrio un error. Vuelva a Intertarlo"})
+    else:
+        return render(request, "actuaperfil.html", {"form": form})

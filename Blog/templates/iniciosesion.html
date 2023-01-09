@@ -8,11 +8,19 @@
 
 {% block contenido %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Iniciar Sesion</button>
-</form>
-<a href="{% url 'Registrarse' %}">Resgistrarse</a>
+<form action="{% url 'IniciarSesion'  %}" method="POST"> {% csrf_token %}
+
+    <table>
+    
+        {{ form.as_table }}
+    
+    </table>
+    
+    <input type="submit" value="Ingresar">
+    
+    
+    </form>
+
+    {{ mensaje }}
 
 {% endblock %}

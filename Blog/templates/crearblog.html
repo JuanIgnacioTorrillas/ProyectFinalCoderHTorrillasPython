@@ -7,9 +7,16 @@ Crear Blog
 
 {% block contenido %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
+
+<form action="{% url 'CrearBlog'%}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+<table>
+{{ form  }}
+{{ form.media }}
+</table>
+<div class="form-group">
+<input type="submit" class="btn btn-primary btn-block" value="Agregar Blog">
+</div>
+</form>
+
 
 {% endblock %}

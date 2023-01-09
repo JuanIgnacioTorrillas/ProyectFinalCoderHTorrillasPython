@@ -20,17 +20,15 @@ Tiene Pestaña "sobre mi" (nav-var)
 
 Herencia Templates
 
-1er Commit:
+2do Commit:
 
 -Login Roto
 
 -Blogs se crean por superuser(admin) (ya que el login esta roto)
 
--ckeditor no funciona correctamente
+-Arreglar/Quitar Busqueda
 
--Arreglar Busqueda
-
--Luego de arreglar estos errores, esta pensado agregar avatar, mensajeria entre usuarios
+-Luego de arreglar estos errores: mensajeria entre usuarios
 
 -Al estar Funcional, agregar Video de funcionalidad
 
@@ -40,4 +38,4 @@ Prueba de Errores:
 
 -Funciona el Login? No
 
--Funciona el Registrase? Si
+-Funciona el Registrase? No

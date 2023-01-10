@@ -18,15 +18,12 @@ Poder Subir Editar Y Borrar Blogs
 
 Tiene Pestaña "sobre mi" (nav-var)
 
-Herencia Templates
 
-2do Commit:
+Cambios de Commit:
 
--Login Roto
+-Login Roto=Arreglado, pequeños problemas en editar user/perfil y buscando que aparescan los blogs creados
 
--Blogs se crean por superuser(admin) (ya que el login esta roto)
-
--Arreglar/Quitar Busqueda
+-Blogs se pueden crear por superuser(admin)
 
 -Luego de arreglar estos errores: mensajeria entre usuarios
 

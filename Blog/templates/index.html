@@ -21,7 +21,6 @@
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'SobreMi' %}">Sobre mi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'LeerMas' %}">Blogs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'busquedaAutor' %}">Busqueda</a></li>
                         {% if user.is_authenticated %}
                         <p> Hola {{ user.username }}</p>
                         <img src="{{ Imagen }}" alt="50" width="50">

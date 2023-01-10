@@ -11,15 +11,13 @@ urlpatterns = [
     path ('sobremi/', sobreMi, name= "SobreMi"), #AboutMe
     path ('eliminarBlog/<id>', deleteBlog, name = "EliminarBlog"),
     path ('actualizarBlog/<id>', editBlog, name = "ActualizarBlog"),
-    path("buscar/", buscar, name="buscar"),
-    path("busquedaAutor/", busquedaAutor, name="busquedaAutor"),
-    path ("Login/",login, name = "IniciarSesion"),
+    path ("Login/",login_req, name = "IniciarSesion"),
     path ("Registrarse/", register, name = "Registrarse"),
     path ("actualizarUsuario/", editarUsuario, name = "Actualizar"),
     path ("CerrarSesion/", logout, name= "CerrarSesion"),
     path ("perfil/", perfil, name= "Perfil"),
     path ("editarPerfil/", editarPerfil, name= "EditarPerfil"),
-    path("MisBlogs/",mis_blogs, name="MisbLogs"),
+    path("MisBlogs/",mis_blogs, name="MisBlogs"),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

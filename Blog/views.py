@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from .models import *
 from .forms import *
-from django.views.generic import CreateView,ListView,DetailView,UpdateView,DeleteView
+from django.views.generic import ListView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from django.urls import reverse_lazy
+
 from django.contrib.auth.forms import  AuthenticationForm
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from datetime import date
@@ -33,7 +33,7 @@ class ArticleDetailView(DetailView): #Detalles del blog
 @ login_required
 def mis_blogs(request): #Lista de Blogs del Usuario
     user_name = request.user.get_full_name()
-    blogs = Blog.objects.filter(autor = user_name).order_by("-id") 
+    blogs = Blog.objects.filter(autor = user_name)
     return render(request, "misBlogs.html", {"blogs": blogs}) 
 
 @ login_required
@@ -47,8 +47,10 @@ def CrearBlog(request): #Añadir Blog
             nuevo_blog.save()
             return render(request, "inicio", {"mensaje": "¡Has agregado un Blog!"})
         else:
+            form = BlogForm()
             return render(request, "crearblog.html", {"form" : form, "mensaje": "Error,No se pudo crear la entrada, intentelo denuevo"})
     else:
+        form = BlogForm()
         return render(request, "crearblog.html", {"form" : form})
 
 @ login_required
@@ -77,7 +79,7 @@ def editBlog(request, id): #Editar Blog
                 return render(request, "iniciol", {"mensaje": "El post ha sido editado de forma correcta!"})
             else:
                 formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
-                return render(request, "actualizarblog", {"form" : formulario_edit, "edit": edit, "mensaje_publicacion": "Intentelo Nuevamente, hubo un error"})
+                return render(request, "actualizarblog", {"form" : formulario_edit, "edit": edit, "mensaje": "Intentelo Nuevamente, hubo un error"})
         else:
             formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
             return render(request, "actualizarblog", {"form": formulario_edit , "mensaje": "Editar un blog", "edit": edit})
@@ -93,30 +95,6 @@ def deleteBlog(request, id): #Borrar Blog
         return render(request, "inicio.hmtl", {"mensaje": "Blog eliminado correctamente"})
     else:
         return render(request, "inicio.html", {"mensaje": "No esta autorizado para realizar esta accion"})
-
-def busquedaAutor(request): 
-    return render(request, "busqueda.html")
-    
-def buscar(request): #Busqueda
-    
-    #if request.GET.get("autor"):
-
-        #autor=request.GET["autor"]
-        
-        #Blogs = Blog.objects.filter(autor = autor)  
-        
-        #return render(request, "resultadobusqueda.html", {'Blogs': Blogs })
-    #else:
-        #return render(request, "busqueda.html", {"mensaje":" ¡No Existen Blogs de ese autor!"})   
-
-    if "autor" in request.GET:
-
-        autor=request.GET["autor"]
-
-        Blogs=Blog.objects.filter(autor__icontains=autor)
-        return render(request,"resultadosBusqueda.html", {"Blogs":Blogs} )
-    else:
-        return render(request, "busqueda.html", {"mensaje":"¡No Existen Blogs de ese autor!"})
 
 #-----LOGIN/USUARIO-----
 
@@ -145,7 +123,7 @@ def register(request): #Registrarse
         registro = RegistroForm()
         return render(request, "Registrarse.html", {"form":registro})
 
-def login(request): #Login
+def login_req(request): #Login
     if request.method == "POST":
         form=AuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -155,12 +133,14 @@ def login(request): #Login
             log_user = authenticate(username = usuario, password = clave)
             
             if log_user is not None:    
-                login(request, usuario)
+                login(request, log_user)
                 return render(request, 'inicio.html', {'mensaje':f"Bienvenido {usuario}" })
             else:
+                form = AuthenticationForm()
                 return render(request, 'iniciosesion.html', {'mensaje':"Usuario o contraseña incorrectos", 'form':form})
 
         else:
+            form = AuthenticationForm()
             return render(request, 'iniciosesion.html', {'mensaje':"Usuario o contraseña incorrectos", 'form':form})
 
     else:
@@ -181,9 +161,11 @@ def editarUsuario(request):
             form.save()
             return render(request, "inicio.html", {"mensaje":"Perfil editado correctamente"})
         else:
-           return render(request, "actualizarUser.html", {"form" : form, "mensaje":"Error al editar el perfil"}) 
+            form = EditUserForm()
+            return render(request, "actualizarUser.html", {"form" : form, "mensaje":"Error al editar el perfil"}) 
     else:
-        return render(request, "actualizarUser", {"form":form})
+        form = EditUserForm()
+        return render(request, "actualizarUser.html", {"form":form})
     
 @ login_required #Ver Perfil
 def perfil(request):
@@ -213,6 +195,8 @@ def editarPerfil(request): #Editar Perfil
             datos_nuevos.save()
             return render(request, "inicio.html", {"mensaje": "El perfil ha sido editado exitosamente!"})
         else:
+            form = Form_Perfil()
             return render(request, "actuaperfil.html", {"form" : form, "mensaje": "Lo siento, ocurrio un error. Vuelva a Intertarlo"})
     else:
+        form = Form_Perfil()
         return render(request, "actuaperfil.html", {"form": form})

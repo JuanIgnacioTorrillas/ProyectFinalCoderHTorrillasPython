@@ -8,7 +8,7 @@ Actualizar Perfil
 {% block contenido %}
 
 
-<form action="{% url 'EditarPerfil '%}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+<form action="{% url 'EditarPerfil'%}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
         <table>
             {{ form }}
             {{ form.media  }}

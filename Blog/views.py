@@ -17,9 +17,10 @@ def inicio(request):
     return render(request, 'inicio.html',{})
 
 
-class ListaView(ListView): #Lista de Blogs
-    model= Blog
-    template_name="leermas.html"
+def ListaBlogs(request): #Lista de Blogs
+    blogs = Blog.objects.all().order_by('-fecha')
+    return render(request, 'leermas.html', {'blogs':blogs})
+
 
 
 def sobreMi(request): #About Me
@@ -33,7 +34,7 @@ class ArticleDetailView(DetailView): #Detalles del blog
 @ login_required
 def mis_blogs(request): #Lista de Blogs del Usuario
     user_name = request.user.get_full_name()
-    blogs = Blog.objects.filter(autor = user_name)
+    blogs = Blog.objects.filter(autor__name = user_name)
     return render(request, "misBlogs.html", {"blogs": blogs}) 
 
 @ login_required
@@ -42,15 +43,15 @@ def CrearBlog(request): #Añadir Blog
         form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
             datos = form.cleaned_data
-            nombre_autor = request.user.get_full_name()
+            nombre_autor = request.user
             nuevo_blog = Blog(titulo = datos["titulo"], subtitulo = datos["subtitulo"], cuerpo = datos["cuerpo"], imagen = datos["imagen"] , autor = nombre_autor, fecha = date.today())
             nuevo_blog.save()
-            return render(request, "inicio", {"mensaje": "¡Has agregado un Blog!"})
+            return render(request, "inicio.html", {"mensaje": "¡Has agregado un Blog!"})
         else:
-            form = BlogForm()
+            form = BlogForm(initial={})
             return render(request, "crearblog.html", {"form" : form, "mensaje": "Error,No se pudo crear la entrada, intentelo denuevo"})
     else:
-        form = BlogForm()
+        form = BlogForm(initial={})
         return render(request, "crearblog.html", {"form" : form})
 
 @ login_required
@@ -79,10 +80,10 @@ def editBlog(request, id): #Editar Blog
                 return render(request, "iniciol", {"mensaje": "El post ha sido editado de forma correcta!"})
             else:
                 formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
-                return render(request, "actualizarblog", {"form" : formulario_edit, "edit": edit, "mensaje": "Intentelo Nuevamente, hubo un error"})
+                return render(request, "actualizarblog.html", {"form" : formulario_edit, "edit": edit, "mensaje": "Intentelo Nuevamente, hubo un error"})
         else:
             formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
-            return render(request, "actualizarblog", {"form": formulario_edit , "mensaje": "Editar un blog", "edit": edit})
+            return render(request, "actualizarblog.html", {"form": formulario_edit , "mensaje": "Editar un blog", "edit": edit})
     else:
         return render(request, "inicio.html", {"mensaje": "No puede editar esto"})
 
@@ -148,7 +149,7 @@ def login_req(request): #Login
     return render(request, "iniciosesion.html", {"form":form})
     
 @ login_required #LogOut
-def logout(request):
+def logout_req(request):
     logout(request)
     return render(request, "inicio.html", {"mensaje":"LogOut Correcto"})
     

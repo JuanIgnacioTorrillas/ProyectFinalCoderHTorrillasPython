@@ -3,7 +3,7 @@
 
 
 {% block titulo %}
-Aqui Vas a Ver Todos Los Titulos y Autores de Los Blogs  
+Aqui Vas a Ver Todos Los Blogs
 {% endblock %}
 
 {% block contenido %}
@@ -12,14 +12,15 @@ Aqui Vas a Ver Todos Los Titulos y Autores de Los Blogs
 <h1>Blogs</h1>
 
 <ul>
-{% for blog in object_list%}
+{% for blog in blogs%}
 
     <li><a href="{% url "DetalleBlog" blog.pk %}"> 
     
     {% csrf_token %}
     {{ form }}
     {{ blog.titulo | safe}} </a> -
-    {{ blog.autor }} <br/>
+    {{ blog.autor }} 
+    {{ blog.fecha }} <br/>
     
 
 {% endfor %}

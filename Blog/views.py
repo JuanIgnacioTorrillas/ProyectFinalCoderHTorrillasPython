@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import *
 from .forms import *
 from django.views.generic import ListView,DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -31,11 +31,7 @@ class ArticleDetailView(DetailView): #Detalles del blog
     model=Blog
     template_name="detalle.html"
 
-@ login_required
-def mis_blogs(request): #Lista de Blogs del Usuario
-    user_name = request.user.get_full_name()
-    blogs = Blog.objects.filter(autor__name = user_name)
-    return render(request, "misBlogs.html", {"blogs": blogs}) 
+
 
 @ login_required
 def CrearBlog(request): #Añadir Blog
@@ -54,49 +50,40 @@ def CrearBlog(request): #Añadir Blog
         form = BlogForm(initial={})
         return render(request, "crearblog.html", {"form" : form})
 
-@ login_required
-def editBlog(request, id): #Editar Blog
-    user_name = request.user.get_full_name()
-    edit = Blog.objects.get(id = id)
-    if user_name == edit.autor:        # Solo el Autor Tiene Permiso
-        if request.method == "POST":
-            formulario = BlogForm(request.POST, request.FILES)
-            if formulario.is_valid():
-                datos = formulario.cleaned_data
-                
-                info_imagen = datos["imagen"]
-                if str(type(info_imagen)) == "<class 'NoneType'>":      # Imagen sin cambios,no se actualiza la base de datos
-                    pass
-                elif str(info_imagen) == "False":                       # False=None
-                   edit.imagen = None
-                else:                                                   # Dentro del else=Hay Imagen
-                    edit.imagen = datos["imagen"]
 
-                edit.titulo = datos["titulo"]
-                edit.subtitulo = datos["subtitulo"]
-                edit.cuerpo = datos["cuerpo"]
-                edit.save()
 
-                return render(request, "iniciol", {"mensaje": "El post ha sido editado de forma correcta!"})
-            else:
-                formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
-                return render(request, "actualizarblog.html", {"form" : formulario_edit, "edit": edit, "mensaje": "Intentelo Nuevamente, hubo un error"})
-        else:
-            formulario_edit = BlogForm(initial={"titulo": edit.titulo, "subtitulo": edit.subtitulo, "cuerpo": edit.cuerpo, "imagen": edit.imagen})
-            return render(request, "actualizarblog.html", {"form": formulario_edit , "mensaje": "Editar un blog", "edit": edit})
+
+@login_required
+def editBlog(request, idPost):
+    
+    blog = Blog.objects.get(id=idPost)   
+    form = BlogForm(instance=blog)
+    
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            
+            return redirect(f'/article/{idPost}')
+    
+    context = {
+        'form':form,
+    }
+    
+    return render(request, 'actualizarblog.html', context)
+
+
+
+
+@login_required
+def deleteBlog(request, id):
+    if request.method == 'GET':
+        articulo = Blog.objects.get(id=id)
+        articulo.delete()
+        return render(request, 'Inicio.html', {'mensaje':'Articulo Eliminado Correctamente'})
     else:
-        return render(request, "inicio.html", {"mensaje": "No puede editar esto"})
-
-@ login_required
-def deleteBlog(request, id): #Borrar Blog
-    user_name = request.user.get_full_name()
-    blog_delete = Blog.objects.get(id=id)
-    if user_name == blog_delete.autor:      # Solo el Autor
-        blog_delete.delete()
-        return render(request, "inicio.hmtl", {"mensaje": "Blog eliminado correctamente"})
-    else:
-        return render(request, "inicio.html", {"mensaje": "No esta autorizado para realizar esta accion"})
-
+        return render(request, 'Inicio.html', {'mensaje':'No puede eliminar el articulo'})
+    
 #-----LOGIN/USUARIO-----
 
 def obtenerAvatar(request):

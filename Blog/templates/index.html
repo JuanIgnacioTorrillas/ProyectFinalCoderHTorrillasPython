@@ -22,10 +22,9 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'SobreMi' %}">Sobre mi</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'LeerMas' %}">Blogs</a></li>
                         {% if user.is_authenticated %}
-                        <p> Hola {{ user.username }}</p>
+                        <p> {{ user.username }}</p>
                         <img src="{{ Imagen }}" alt="50" width="50">
                         <li class="nav-item"><a class="nav-link" href="{% url 'CrearBlog' %}">Crear Blog</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'MisBlogs' %}">Mis Blogs</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Perfil' %}">Perfil</a></li>
 
                         <li class="nav-item"><a class="nav-link" href="{% url 'CerrarSesion' %}">LogOut</a></li>

@@ -17,6 +17,11 @@ Contenido Del Blog Seleccionado
 {{ blog.cuerpo | safe}}
 </h2>
 <br/>
+
+{% if blog.imagen %}
+<img class="img-fluid" src= "{{ blog.imagen.url }}" alt="..." /></a>
+{% else %}  
+{% endif %}   
 <br/>
 
 <a href="{% url "LeerMas" %}">Volver</a>

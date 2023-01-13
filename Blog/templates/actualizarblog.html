@@ -8,13 +8,14 @@
 
 {% block contenido %}
 
-<form action="{% url 'ActualizarBlog' edit.id %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+<form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
 <table>
 {{ form  }}
 {{ form.media }}
+{{ form.as_p }}
 </table>
 <div class="form-group">
-<input type="submit" class="btn btn-primary btn-block" value="Editar Blog">
+<input type="submit" class="btn btn-primary btn-block" value="Correcto">
 </div>
 </form>
 

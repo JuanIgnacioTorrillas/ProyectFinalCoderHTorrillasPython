@@ -21,6 +21,11 @@ Aqui Vas a Ver Todos Los Blogs
     {{ blog.titulo | safe}} </a> -
     {{ blog.autor }} 
     {{ blog.fecha }} <br/>
+ 
+    <p>
+    <a href="{% url "ActualizarBlog" blog.id %}">Editar</a>
+    <a href="{% url "EliminarBlog" blog.id %}">Eliminar</a>
+    </p>
     
 
 {% endfor %}

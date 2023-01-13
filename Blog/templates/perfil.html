@@ -13,7 +13,10 @@ Perfil
 <a class="nav-link" href="{% url 'Actualizar' %}"}>Actualizar Usuario</a></li>
     
 
-
+{% if avatar %}
+<img src="{{ avatar }}" alt="" width="150px" height="100px" class="img-thumbnail">
+{% else %}
+{% endif %}
 <ul>
     <li>User: {{user.username}}</li>
     <li>Email: {{user.email}}</li>

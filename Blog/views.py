@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from .forms import *
+
 from django.views.generic import ListView,DetailView
 
 from django.contrib.auth.decorators import login_required
@@ -12,9 +13,20 @@ from datetime import date
 
 #-----BLOG-----
 
+def obtenerAvatar(request):
+    if request.user.is_authenticated:
+        lista = Perfil.objects.filter(user=request.user)
+        if len(lista)!=0:
+            imagen = lista[0].avatar.url
+        else:
+            imagen = ""
+    else:
+        imagen = ""
+    return imagen
+
 def inicio(request):
     
-    return render(request, 'inicio.html',{})
+    return render(request, 'inicio.html' )
 
 
 def ListaBlogs(request): #Lista de Blogs
@@ -45,7 +57,7 @@ def CrearBlog(request): #Añadir Blog
             return render(request, "inicio.html", {"mensaje": "¡Has agregado un Blog!"})
         else:
             form = BlogForm(initial={})
-            return render(request, "crearblog.html", {"form" : form, "mensaje": "Error,No se pudo crear la entrada, intentelo denuevo"})
+            return render(request, "crearblog.html", {"form" : form, "mensaje": "Error,No se pudo crear el blog, intentelo denuevo"})
     else:
         form = BlogForm(initial={})
         return render(request, "crearblog.html", {"form" : form})
@@ -54,7 +66,7 @@ def CrearBlog(request): #Añadir Blog
 
 
 @login_required
-def editBlog(request, idPost):
+def editBlog(request, idPost): #Editar
     
     blog = Blog.objects.get(id=idPost)   
     form = BlogForm(instance=blog)
@@ -65,7 +77,7 @@ def editBlog(request, idPost):
             form.save()
             
             return redirect(f'/article/{idPost}')
-    
+
     context = {
         'form':form,
     }
@@ -76,7 +88,7 @@ def editBlog(request, idPost):
 
 
 @login_required
-def deleteBlog(request, id):
+def deleteBlog(request, id): #Borrar
     if request.method == 'GET':
         articulo = Blog.objects.get(id=id)
         articulo.delete()
@@ -86,16 +98,7 @@ def deleteBlog(request, id):
     
 #-----LOGIN/USUARIO-----
 
-def obtenerAvatar(request):
-    if request.user.is_authenticated:
-        lista = Perfil.objects.filter(user=request.user)
-        if len(lista)!=0:
-            imagen = lista[0].avatar.url
-        else:
-            imagen = ""
-    else:
-        imagen = ""
-    return imagen
+
 
 
 def register(request): #Registrarse
@@ -188,3 +191,4 @@ def editarPerfil(request): #Editar Perfil
     else:
         form = Form_Perfil()
         return render(request, "actuaperfil.html", {"form": form})
+    

@@ -12,7 +12,7 @@ Aqui Vas a Ver Todos Los Blogs
 <h1>Blogs</h1>
 
 <ul>
-{% for blog in blogs%}
+{% for blog in blogs %}
 
     <li><a href="{% url "DetalleBlog" blog.pk %}"> 
     
@@ -23,12 +23,16 @@ Aqui Vas a Ver Todos Los Blogs
     {{ blog.fecha }} <br/>
  
     <p>
+    {% if user.is_authenticated %}
     <a href="{% url "ActualizarBlog" blog.id %}">Editar</a>
+    {% endif %}
+    {% if user.is_superuser %}
     <a href="{% url "EliminarBlog" blog.id %}">Eliminar</a>
+    {% endif %}
     </p>
-    
 
-{% endfor %}
+
+    {% endfor %}
 
 </ul>
 

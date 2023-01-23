@@ -19,19 +19,20 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'SobreMi' %}">Sobre mi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'LeerMas' %}">Blogs</a></li>
                         {% if user.is_authenticated %}
-                        <p> {{ user.username }}</p>
-                        <img src="{{ Imagen }}" alt="50" width="50">
+                        
+                        <a class="navbar-brand" href="{% url 'Perfil' %}">{{ user.get_username }} </a>
+                        
                         <li class="nav-item"><a class="nav-link" href="{% url 'CrearBlog' %}">Crear Blog</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Perfil' %}">Perfil</a></li>
-
                         <li class="nav-item"><a class="nav-link" href="{% url 'CerrarSesion' %}">LogOut</a></li>
                         {% else %}
+                        
                         <li class="nav-item"><a class="nav-link" href="{% url 'IniciarSesion' %}">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'Registrarse' %}">Registrarse</a></li>
                         {% endif %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'SobreMi' %}">Sobre mi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'LeerMas' %}">Blogs</a></li>
                         
                     </ul>
                 </div>

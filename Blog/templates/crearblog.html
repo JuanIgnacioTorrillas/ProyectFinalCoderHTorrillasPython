@@ -3,12 +3,16 @@
 
 {% block titulo %}
 Crear Blog
+<br/>
+<h3>*ATENCION PONER FECHA EN FORMATO MES/DIA/AÑO*</h3>
+<br/>
+{{ mensaje }}
 {% endblock %}
 
 {% block contenido %}
 
 
-<form action="{% url 'CrearBlog'%}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+<form action="" method="post" enctype="multipart/form-data"> {% csrf_token %}
 <table>
 {{ form  }}
 {{ form.media }}

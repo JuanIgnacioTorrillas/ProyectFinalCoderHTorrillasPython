@@ -6,33 +6,32 @@ Alumno Torrillas Juan Ignacio
 
 Comision 34640
 
-La idea del proyecto es una Pagina basica para subir instrucciones de x tema (puede ser de multiples temas)
+La idea del proyecto es una Pagina (muy)basica para subir instrucciones de x tema (puede ser de multiples temas) para probar los metodos POST/GET
 
-Contara con Funcion de Armar blog de estas Instrucciones
+1) Se puede Leer Blogs y "Sobre mi" sin loguearse (Cliquear en Paso a Paso lleva al login)
 
-Ver Blogs listados en la pestaña Blogs de la nav-bar
+2) Login y Registro (Registro no esta como login automatico, se tiene que loguear manualmente)
 
-Poder Loguearse,Regristrarse,Actualizar Perfil,LogOut
+3) Poder Crear Blogs y editarlos una vez logueado
 
-Poder Subir Editar Y Borrar Blogs
+4) Poder Editar Perfil e Informacion Usuario
 
-Tiene Pestaña "sobre mi" (nav-var)
+5) SOLO SUPERADMIN PUEDE BORRAR LOS BLOGS
 
+6) Leer/Enviar/Responder mensajes (Responder Mensajes al leer mensajes recibidos)
 
-Cambios de Commit:
-
--Login Roto=Arreglado, pequeños problemas en editar user/perfil y buscando que aparescan los blogs creados
-
--Blogs se pueden crear por superuser(admin)
-
--Luego de arreglar estos errores: mensajeria entre usuarios
-
--Al estar Funcional, agregar Video de funcionalidad
+7) Datos de algunos Usuarios y Admin en admin.txt (Con fines de testeo)
 
 Prueba de Errores:
 
 -Inicio Funciona Correctamente, como asi la nav-bar? SI
 
--Funciona el Login? No
+-Funciona el Login? No (ARREGLADO)
 
--Funciona el Registrase? No
+-Funciona el Registrase? No (ARREGLADO)
+
+-Funciona CRUD? No (Arreglado)
+
+-Mensajes se envian? Si
+
+-Leer mensajes? Si

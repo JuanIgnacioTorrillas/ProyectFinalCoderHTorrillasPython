@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
 from django.conf.urls.static import static
 from django.conf import settings
@@ -17,6 +17,7 @@ urlpatterns = [
     path ("CerrarSesion/", logout_req, name= "CerrarSesion"),
     path ("perfil/", perfil, name= "Perfil"),
     path ("editarPerfil/", editarPerfil, name= "EditarPerfil"),
+    path("mensajes/",include("Chat.urls")),
     
 ]
 

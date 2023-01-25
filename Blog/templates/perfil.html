@@ -3,6 +3,8 @@
 
 {% block titulo %}
 Perfil
+<br/>
+{{ mensaje }}
 {% endblock %}
 
 {% block contenido %}
@@ -24,6 +26,10 @@ Perfil
     <li>Apellido: {{user.last_name}}</li>
 
 </ul>
+
+<a class="btn btn-primary text-uppercase" href="{% url 'send_message' %}">Enviar Mensaje</a>
+<a class="btn btn-primary text-uppercase" href="{% url 'view_messages' %}">Leer Mensajes</a>
+
 
 <br/>
 <h2>Informacion del perfil</h2>

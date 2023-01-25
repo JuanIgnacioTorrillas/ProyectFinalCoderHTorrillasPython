@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+<h1>Mensajes</h1>
+{% endblock %}
+
+
+{% block contenido %}
+
+<h1>Mensajes Enviados</h1>
+<ul>
+{% for message in sent_messages %}
+  <li>
+    <strong>Para:</strong> {{ message.recipient }}
+    <p>{{ message.message }}</p>
+  </li>
+{% endfor %}
+</ul>
+
+<h1>Mensajes Recibidos</h1>
+<ul>
+{% for message in received_messages %}
+  <li>
+    <strong>De:</strong> {{ message.sender }}
+    <p>{{ message.message }}</p>
+    <a href="{% url 'respond_message' message.id %}">Responder</a>
+  </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

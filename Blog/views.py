@@ -150,7 +150,7 @@ def editarUsuario(request):
         form = EditUserForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
-            return render(request, "inicio.html", {"mensaje":"Perfil editado correctamente"})
+            return render(request, "inicio.html", {"mensaje":"Informacion editada correctamente"})
         else:
             form = EditUserForm()
             return render(request, "actualizarUser.html", {"form" : form, "mensaje":"Error al editar el perfil"}) 
@@ -187,7 +187,7 @@ def editarPerfil(request): #Editar Perfil
             return render(request, "inicio.html", {"mensaje": "El perfil ha sido editado exitosamente!"})
         else:
             form = Form_Perfil()
-            return render(request, "actuaperfil.html", {"form" : form, "mensaje": "Lo siento, ocurrio un error. Vuelva a Intertarlo"})
+            return render(request, "actuaperfil.html", {"form" : form, "mensaje": "Lo siento, ocurrio un error.Webs requieren: https:/www. Vuelva a Intentarlo"})
     else:
         form = Form_Perfil()
         return render(request, "actuaperfil.html", {"form": form})

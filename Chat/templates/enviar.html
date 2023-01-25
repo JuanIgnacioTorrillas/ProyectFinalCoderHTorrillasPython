@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block titulo %}
+<h1>Enviar Mensaje</h1>
+{% endblock %}
+
+{% block contenido %}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Enviar">
+</form>
+
+{% endblock %}
